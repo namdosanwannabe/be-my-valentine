@@ -45,6 +45,8 @@ function generateMessage(noCount) {
     "No",
     "Are you sure? Oh men",
     "Bubeee please",
+    "Oh men",
+    "Bubeeeeeee please",
     "Don't do this to me :(((",
     "You're breaking my heart",
     "I'm gonna cry...",
