@@ -1,27 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-    <title>Valentine</title>
-  </head>
-  <body>
-    <main class="container">
-      <img class="cat-img" src="img/cat-0.jpg" alt="Picture of a cat" />
-      <p class="title">Will you be my Valentine?</p>
-      <div class="buttons">
-        <button type="button" class="btn btn--yes">Yes</button>
-        <button type="button" class="btn btn--no">No</button>
-      </div>
-    </main>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 6 Months, My Love! 💙</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #cce7ff; /* لون أزرق فاتح */
+            color: #003366; /* أزرق غامق */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        h1 {
+            font-size: 36px;
+            color: #0066cc; /* أزرق متوسط */
+        }
+        p {
+            font-size: 20px;
+            margin: 20px;
+        }
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .heart {
+            font-size: 50px;
+            animation: heartbeat 1s infinite;
+            color: #0066cc;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Happy 6 Months, My Love! 💙</h1>
+        <p>Six months ago, you became the best part of my life. Every moment with you is a blessing, and I can't wait for many more months and years together. You are my happiness, my safe place, and my everything. I love you endlessly! 💙</p>
+        <p class="countdown">We've been together for: <span id="daysTogether"></span> days! 💙</p>
+        <div class="heart">💙💙💙</div>
+    </div>
 
-    <script type="module" src="script.js"></script>
-  </body>
+    <script>
+        function calculateDaysTogether() {
+            const start = new Date("2024-09-14");
+            const today = new Date();
+            const difference = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+            return difference;
+        }
+
+        document.getElementById("daysTogether").innerText = calculateDaysTogether();
+    </script>
+</body>
 </html>
