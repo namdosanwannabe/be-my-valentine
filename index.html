@@ -1,27 +1,254 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-    <title>Valentine</title>
-  </head>
-  <body>
-    <main class="container">
-      <img class="cat-img" src="img/cat-0.jpg" alt="Picture of a cat" />
-      <p class="title">Will you be my Valentine?</p>
-      <div class="buttons">
-        <button type="button" class="btn btn--yes">Yes</button>
-        <button type="button" class="btn btn--no">No</button>
-      </div>
-    </main>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Be My Valentine? ❤️</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-    <script type="module" src="script.js"></script>
-  </body>
+    body {
+      background-color: #ffe6eb;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Floating background hearts */
+    .bg-hearts {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -100px;
+      font-size: 24px;
+      animation: float 6s linear infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      z-index: 10;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .cat-img {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      border-radius: 15px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      color: #ff3366;
+      font-size: 26px;
+      margin-bottom: 20px;
+      direction: ltr;
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      min-height: 80px;
+      position: relative;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s;
+      outline: none;
+    }
+
+    #yes-btn {
+      background-color: #28a745;
+      color: white;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+      z-index: 100;
+    }
+
+    #yes-btn:hover {
+      background-color: #218838;
+    }
+
+    #no-btn {
+      background-color: #dc3545;
+      color: white;
+      box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+    }
+
+    .success-screen {
+      display: none;
+    }
+
+    .success-screen h1 {
+      font-size: 32px;
+      color: #ff3366;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-hearts" id="hearts-container"></div>
+
+  <div class="card" id="main-card">
+    <!-- Asking Screen -->
+    <div id="ask-screen">
+      <img id="cat-image" class="cat-img" src="img/cat-0.jpg" alt="Cat asking">
+      <h1 id="question-text">Will you be my Valentine? 🌹</h1>
+      <div class="btn-container">
+        <button id="yes-btn">Yes ❤️</button>
+        <button id="no-btn">No 💔</button>
+      </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div id="success-screen" class="success-screen">
+      <img class="cat-img" src="img/cat-yes.jpg" alt="Happy Cat">
+      <h1>Yaaaaay! 🎉❤️</h1>
+      <p style="color: #666; font-size: 18px; margin-top: 10px;">I knew you would say YES! 🥰</p>
+    </div>
+  </div>
+
+  <script>
+    // Create floating hearts
+    const heartsContainer = document.getElementById('hearts-container');
+    const heartIcons = ['❤️', '💖', '💕', '💗', '🌹'];
+    
+    for (let i = 0; i < 20; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+      heart.style.animationDelay = Math.random() * 5 + 's';
+      heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+      heartsContainer.appendChild(heart);
+    }
+
+    const catImage = document.getElementById('cat-image');
+    const yesBtn = document.getElementById('yes-btn');
+    const noBtn = document.getElementById('no-btn');
+    const askScreen = document.getElementById('ask-screen');
+    const successScreen = document.getElementById('success-screen');
+
+    let noCount = 0;
+    const maxNo = 5;
+
+    const noTexts = [
+      "No 💔",
+      "Are you sure? 🥺",
+      "Really sure?? 😿",
+      "Think again! 😭",
+      "Last chance! 💔",
+      "You have no choice! 😜"
+    ];
+
+    // Function to handle NO click
+    noBtn.addEventListener('click', () => {
+      noCount++;
+      
+      // Update Image
+      if (noCount <= maxNo) {
+        catImage.src = `img/cat-${noCount}.jpg`;
+      } else {
+        catImage.src = `img/cat-${maxNo}.jpg`;
+      }
+
+      // Update No Button text
+      if (noCount < noTexts.length) {
+        noBtn.innerText = noTexts[noCount];
+      }
+
+      // Grow Yes Button
+      const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+      const currentPaddingVert = parseFloat(window.getComputedStyle(yesBtn).paddingTop);
+      const currentPaddingHoriz = parseFloat(window.getComputedStyle(yesBtn).paddingLeft);
+
+      yesBtn.style.fontSize = (currentSize + 6) + 'px';
+      yesBtn.style.padding = `${currentPaddingVert + 4}px ${currentPaddingHoriz + 8}px`;
+    });
+
+    // Function to handle YES click
+    yesBtn.addEventListener('click', () => {
+      askScreen.style.display = 'none';
+      successScreen.style.display = 'block';
+
+      // Trigger Confetti
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+      // Play Sound using Web Audio API
+      playCelebrationSound();
+    });
+
+    function playCelebrationSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const notes = [261.63, 329.63, 392.00, 523.25]; // C E G C
+        notes.forEach((freq, index) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + index * 0.12);
+          gain.gain.setValueAtTime(0.1, audioCtx.currentTime + index * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + index * 0.12 + 0.3);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + index * 0.12);
+          osc.stop(audioCtx.currentTime + index * 0.12 + 0.3);
+        });
+      } catch (e) {
+        console.log("Audio not supported");
+      }
+    }
+  </script>
+</body>
 </html>
